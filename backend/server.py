@@ -56,27 +56,13 @@ def get_NYT_articles():
 def index():
     """Show homepage."""
 
-    return render_template("base.html")
+    return render_template("index.html")
 
 @app.route('/geo.json')
 def geo_info():
     """JSON information about geo."""
 
     return jsonify(get_NYT_articles())
-
-    # bears = {
-    #     bear.marker_id: {
-    #         "bearId": bear.bear_id,
-    #         "gender": bear.gender,
-    #         "birthYear": bear.birth_year,
-    #         "capYear": bear.cap_year,
-    #         "capLat": bear.cap_lat,
-    #         "capLong": bear.cap_long,
-    #         "collared": bear.collared.lower()
-    #     }
-    #     for bear in Bear.query.limit(50)}
-
-    # return jsonify(bears)
 
 
 

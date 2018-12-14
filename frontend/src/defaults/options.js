@@ -1,0 +1,45 @@
+export default {
+  camera: {
+    far: 20000,
+    near: 1,
+    positionX: 0,
+    positionY: 0,
+    radiusScale: 3,
+    viewAngle: 45,
+  },
+  orbitControls: {
+    autoRotate: true,
+    autoRotateSpeed: 0.02,
+    rotateSpeed: 0.05,
+    enableDamping: true,
+    dampingFactor: 0.1,
+    enablePan: true,
+    enableZoom: false,
+    enableRotate: true,
+    zoomSpeed: 1,
+    minPolarAngle: Math.PI * 7 / 16,
+    maxPolarAngle: Math.PI * 9 / 16,
+  },
+  globe: {
+    isFocused: true,
+    widthSegments: 50,
+    heightSegments: 50,
+    type: 'real',
+  },
+  space: {
+    radius: 5000,
+    widthSegments: 50,
+    heightSegments: 50,
+  },
+  renderer: {
+    antialias: true,
+  },
+  light: {
+    sceneLightColor: 0xf5f5dc,
+    sceneLightIntensity: 0.7,
+    frontLightColor: 0xf5f5dc,
+    frontLightIntensity: 2,
+    backLightColor: 0xf5f5dc,
+    backLightIntensity: 10,
+  },
+};
