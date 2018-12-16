@@ -1,12 +1,13 @@
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, jsonify
+from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 import os
 
-# from model import connect_to_db, db, Bear
 template_dir = os.path.abspath('../frontend/public')
 app = Flask(__name__, template_folder=template_dir)
+CORS(app)
 app.secret_key = "ursusmaritimus"
 app.jinja_env.undefined = StrictUndefined
 
