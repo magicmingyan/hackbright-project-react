@@ -1,60 +1,60 @@
 import React, { Component } from 'react';
-import Input from './components/Input';  
-import TextArea from './components/TextArea';  
-import Select from './components/Select';
-import Button from './components/Button'
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 
 class Login extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			username: '',
+			email: '',
 			password: ''
 		}
-	    this.handleTextArea = this.handleTextArea.bind(this);
-	    this.handleFullName = this.handleFullName.bind(this);
-	    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-	    this.handleClearForm = this.handleClearForm.bind(this);
-	    this.handleInput = this.handleInput.bind(this);
 	}
 
-	handleFullName(e) {
-	   let value = e.target.value;
-	   this.setState( prevState => ({ newUser : 
-	        {...prevState.newUser, name: value
-	        }
-	      }), () => console.log(this.state.newUser))
-    }
+	validateForm() {
+		return this.state.email.length > 0 && this.state.password.length >0;
+	}
 
-    handleFormSubmit() {
-    // Form submission logic
-    }
-    handleClearForm() {
-    // Logic for resetting the form
-    }
+	handleChange = event => {
+		this.setState({
+			[event.target.id]: event.target.value
+		});
+	}
 
-    handleTextArea() {
-
-    }
-
-    handleInput() {
-    	
-    }
+	handleSubmit = event => {
+		event.preventDefault();
+	}
 
 	render() {
 		return (
-	      <form className="container" onSubmit={this.handleFormSubmit}>
-
-	        <Input /> {/* Name of the user */}
-	        <Input /> {/* Input for Age */} 
-	        <Select /> {/* Gender Selection */}
-	        <TextArea /> {/* About you */}
-	        <Button /> { /*Submit */ }
-	        <Button /> {/* Clear the form */}
-	      </form>
-
-
-
+	      <div className="Login">
+	        <form onSubmit={this.handleSubmit}>
+	          <FormGroup controlId="email" bsSize="large">
+	            <ControlLabel>Email</ControlLabel>
+	            <FormControl
+	              autoFocus
+	              type="email"
+	              value={this.state.email}
+	              onChange={this.handleChange}
+	            />
+	          </FormGroup>
+	          <FormGroup controlId="password" bsSize="large">
+	            <ControlLabel>Password</ControlLabel>
+	            <FormControl
+	              value={this.state.password}
+	              onChange={this.handleChange}
+	              type="password"
+	            />
+	          </FormGroup>
+	          <Button
+	            block
+	            bsSize="large"
+	            disabled={!this.validateForm()}
+	            type="submit"
+	          >
+	            Login
+	          </Button>
+	        </form>
+	      </div>
 					
 		);
 	}
