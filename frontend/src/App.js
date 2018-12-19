@@ -13,6 +13,8 @@ class App extends Component {
 
     window.WE.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(earth);
 
+    // $.post('http://localhost:5000/result', "ming@gmail.com", ()=>console.log("success!"))
+
     $.get('http://localhost:5000/geo.json', function (geos) {
 
         let geo;

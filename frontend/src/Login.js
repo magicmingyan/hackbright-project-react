@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import axios from 'axios';
+import $ from "jquery";
 
 class Login extends Component {
 	constructor(props) {
@@ -21,7 +23,10 @@ class Login extends Component {
 	}
 
 	handleSubmit = event => {
+		console.log(this.state.email)
 		event.preventDefault();
+		// $.post('http://localhost:5000/result', {email: this.state.email}, ()=>console.log("success!"))
+		axios.post('http://localhost:5000/result', {email: this.state.email, password: this.state.password})
 	}
 
 	render() {
@@ -36,14 +41,16 @@ class Login extends Component {
 	              value={this.state.email}
 	              onChange={this.handleChange}
 	            />
+
 	          </FormGroup>
 	          <FormGroup controlId="password" bsSize="large">
 	            <ControlLabel>Password</ControlLabel>
 	            <FormControl
+	              type="password"
 	              value={this.state.password}
 	              onChange={this.handleChange}
-	              type="password"
 	            />
+
 	          </FormGroup>
 	          <Button
 	            block

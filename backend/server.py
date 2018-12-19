@@ -1,13 +1,14 @@
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, jsonify
-from flask_cors import CORS
+from flask import Flask, render_template, jsonify, request
+from flask_cors import CORS, cross_origin
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 import os
 
 template_dir = os.path.abspath('../frontend/public')
 app = Flask(__name__, template_folder=template_dir)
-CORS(app)
+# CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 app.secret_key = "ursusmaritimus"
 app.jinja_env.undefined = StrictUndefined
 
@@ -66,7 +67,15 @@ def geo_info():
     return jsonify(get_NYT_articles())
 
 
+@app.route('/result', methods = ['GET', 'POST'])
+@cross_origin()
+def result():
+    if request.method == 'POST':
 
+        data = request.get_json(silent=True)
+        item = {'email': data.get('email'), "password": data.get('password')}
+        print(item)
+        return "hi"
 
 #---------------------------------------------------------------------#
 
@@ -74,6 +83,7 @@ def geo_info():
 
 if __name__ == "__main__":
     app.debug = True
+    CORS(app, resources={r"/*": {"origins": "*"}})
     # connect_to_db(app)
     DebugToolbarExtension(app)
 
