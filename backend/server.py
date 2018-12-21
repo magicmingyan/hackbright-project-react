@@ -2,7 +2,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, jsonify, request, session
 from flask_cors import CORS, cross_origin
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, User
+from model import connect_to_db, db, User
 import requests
 import os
 
@@ -68,9 +68,9 @@ def geo_info():
     return jsonify(get_NYT_articles())
 
 
-@app.route('/result', methods = ['GET', 'POST'])
+@app.route('/login', methods = ['GET', 'POST'])
 @cross_origin()
-def result():
+def login():
     if request.method == 'POST':
 
         data = request.get_json(silent=True)
@@ -87,6 +87,22 @@ def result():
 
         session["user_id"] = user.user_id
         return "logged in"
+
+@app.route('/signup', methods = ['POST'])
+@cross_origin()
+def signup():
+    data = request.get_json(silent=True)
+    user_name = data.get('user_name')
+    email = data.get('email')
+    password = data.get('password')
+
+    new_user = User(user_name=user_name, email=email, password=password)
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return "signed up"
+
 #---------------------------------------------------------------------#
 
 

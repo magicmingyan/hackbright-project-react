@@ -16,8 +16,7 @@ class Signup extends Component {
 	validateForm() {
 	    return (
 	      this.state.email.length > 0 &&
-	      this.state.password.length > 0 &&
-	      this.state.password === this.state.confirmPassword
+	      this.state.password.length > 0 
 	    );
 	}
 
@@ -27,6 +26,27 @@ class Signup extends Component {
       });
     }
 
+	handleSubmit = event => {
+		event.preventDefault();
+		// $.post('http://localhost:5000/result', {email: this.state.email}, ()=>console.log("success!"))
+		axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+		axios.post('http://localhost:5000/signup', 
+					{user_name: this.state.user_name, email: this.state.email, password: this.state.password})
+		.then(response => {
+
+ 			if(response.data == "signed up"){
+				 console.log("signed up");
+				 this.props.history.push("/globe");
+			 }
+ 			else{
+				 console.log("Signup not successful");
+				 alert("Signup not successful");
+ 			}
+ 		})
+		 .catch(function (error) {
+		 console.log(error);
+ 		});
+ 	}
 
 	render() {
 	    return (
