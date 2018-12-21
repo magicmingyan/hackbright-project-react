@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import axios from 'axios';
-import $ from "jquery";
+import App from '../App'
 
 class Login extends Component {
 	constructor(props) {
@@ -23,15 +23,30 @@ class Login extends Component {
 	}
 
 	handleSubmit = event => {
-		console.log(this.state.email)
 		event.preventDefault();
 		// $.post('http://localhost:5000/result', {email: this.state.email}, ()=>console.log("success!"))
 		axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 		axios.post('http://localhost:5000/result', {email: this.state.email, password: this.state.password})
-		.then(function (response) {
-    console.log(response);
-  })
-	}
+		.then(response => {
+
+ 			if(response.data == "logged in"){
+				 console.log("Login successfull");
+				 console.log(this)
+				 this.props.history.push("/globe");
+			 }
+ 			else if(response.data == "password incorrect"){
+				 console.log("Username password do not match");
+				 alert("username password do not match")
+			 }
+ 			else{
+				 console.log("Username does not exists");
+				 alert("Username does not exist");
+ 			}
+ 		})
+		 .catch(function (error) {
+		 console.log(error);
+ 		});
+ 	}
 
 	render() {
 		return (
@@ -45,8 +60,8 @@ class Login extends Component {
 	              value={this.state.email}
 	              onChange={this.handleChange}
 	            />
-
 	          </FormGroup>
+
 	          <FormGroup controlId="password" bsSize="large">
 	            <ControlLabel>Password</ControlLabel>
 	            <FormControl
@@ -54,8 +69,8 @@ class Login extends Component {
 	              value={this.state.password}
 	              onChange={this.handleChange}
 	            />
-
 	          </FormGroup>
+
 	          <Button
 	            block
 	            bsSize="large"
@@ -63,6 +78,18 @@ class Login extends Component {
 	            type="submit"
 	          >
 	            Login
+	          </Button>
+	        </form>
+
+	        <p>Dont have an account? </p>
+	        <form onSubmit={this.handleRegister}>
+	          <Button
+	            block
+	            bsSize="large"
+	            type="submit"
+	            href="/signup"
+	          >
+	            Signup
 	          </Button>
 	        </form>
 	      </div>

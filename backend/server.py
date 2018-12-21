@@ -1,5 +1,5 @@
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, session
 from flask_cors import CORS, cross_origin
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, User
@@ -79,12 +79,14 @@ def result():
 
         user = User.query.filter_by(email=email).first()
 
-        print(email)
         if not user:
             return "no user"
-        else:
-            return "hi"
+        
+        if user.password != password:
+            return "password incorrect"
 
+        session["user_id"] = user.user_id
+        return "logged in"
 #---------------------------------------------------------------------#
 
 

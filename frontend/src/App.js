@@ -1,37 +1,31 @@
-import React, { Component } from 'react';
-import './App.css';
-import $ from "jquery";
-
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { Nav, Navbar, NavItem } from "react-bootstrap";
+import "./App.css";
+import Routes from "./Routes";
 
 class App extends Component {
-  componentDidMount() {
-
-    const earth = new window.WE.map('earth_div',{
-                zoom: 3,
-                scrollWheelZoom: true
-                });
-
-    window.WE.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(earth);
-
-    // $.post('http://localhost:5000/result', "ming@gmail.com", ()=>console.log("success!"))
-
-    $.get('http://localhost:5000/geo.json', function (geos) {
-
-        let geo;
-        for (let key in geos) {
-              geo = geos[key];
-              const marker = window.WE.marker([geo.latitude, geo.longitude]).addTo(earth);
-              const popup = marker.bindPopup(geo.title, {maxWidth: 120, closeButton: true});
-        }
-    });
-  }
-
   render() {
     return (
-
-      <div id="earth_div"></div>
+      <div className="App container">
+        <Navbar fluid collapseOnSelect>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <Link to="/">Scratch</Link>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav pullRight>
+              <NavItem href="/signup">Signup</NavItem>
+              <NavItem href="/login">Login</NavItem>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <Routes />
+      </div>
     );
-  }
+  } 
 }
 
 export default App;
