@@ -26,7 +26,11 @@ class Login extends Component {
 		console.log(this.state.email)
 		event.preventDefault();
 		// $.post('http://localhost:5000/result', {email: this.state.email}, ()=>console.log("success!"))
+		axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 		axios.post('http://localhost:5000/result', {email: this.state.email, password: this.state.password})
+		.then(function (response) {
+    console.log(response);
+  })
 	}
 
 	render() {

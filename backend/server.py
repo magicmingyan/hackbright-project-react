@@ -2,6 +2,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_debugtoolbar import DebugToolbarExtension
+from model import connect_to_db, User
 import requests
 import os
 
@@ -73,9 +74,16 @@ def result():
     if request.method == 'POST':
 
         data = request.get_json(silent=True)
-        item = {'email': data.get('email'), "password": data.get('password')}
-        print(item)
-        return "hi"
+        email = data.get('email')
+        password = data.get('password')
+
+        user = User.query.filter_by(email=email).first()
+
+        print(email)
+        if not user:
+            return "no user"
+        else:
+            return "hi"
 
 #---------------------------------------------------------------------#
 
@@ -84,7 +92,7 @@ def result():
 if __name__ == "__main__":
     app.debug = True
     CORS(app, resources={r"/*": {"origins": "*"}})
-    # connect_to_db(app)
+    connect_to_db(app)
     DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0")
