@@ -14,15 +14,17 @@ class Globe extends Component {
 
     // $.post('http://localhost:5000/result', "ming@gmail.com", ()=>console.log("success!"))
 
-    $.get('http://localhost:5000/geo.json', function (geos) {
-
+    $.get('http://localhost:5000/geo.json',  geos => {
         let geo;
         for (let key in geos) {
               geo = geos[key];
-              const marker = window.WE.marker([geo.latitude, geo.longitude]).addTo(earth);
-              const popup = marker.bindPopup(geo.title, {maxWidth: 120, closeButton: true});
+              var marker = window.WE.marker([geo.latitude, geo.longitude]).addTo(earth);
+              var popup = marker.bindPopup(geo.title+"<br/>"+geo.abstract, {maxWidth: 120, closeButton: true});
         }
     });
+
+    
+
   }
 
   render() {

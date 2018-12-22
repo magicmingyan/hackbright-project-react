@@ -88,6 +88,7 @@ def login():
         session["user_id"] = user.user_id
         return "logged in"
 
+
 @app.route('/signup', methods = ['POST'])
 @cross_origin()
 def signup():
