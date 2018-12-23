@@ -10,13 +10,16 @@ class Globe extends Component {
     }
   }
 
-  onMarkerClick = e => {
+  onMarkerClick = (id) => {
         // e.bindPopup("I have just clicked this marker.").openPopup();
-        console.log(e.target)
+
+        return ()=> {
+        // console.log(e.target)
         // e.target.openPopup();
 
-        this.setState((state) => ({ read_articles: state.read_articles.concat("hi") }))
+        this.setState((state) => ({ read_articles: state.read_articles.concat(id) }))
         console.log(this.state  )
+      }
   }
 
   componentDidMount() {
@@ -37,7 +40,7 @@ class Globe extends Component {
               var marker = window.WE.marker([geo.latitude, geo.longitude, geo.url])
                 .addTo(earth)
                 .bindPopup(geo.title+"<br/><br/>"+geo.abstract, {maxWidth: 300, closeButton: true})
-                .on('click', this.onMarkerClick)
+                .on('click', this.onMarkerClick(geo.id))
               ;
               // console.log(marker)
               // marker.bindPopup(geo.title+"<br/><br/>"+geo.abstract, {maxWidth: 120, closeButton: true});
