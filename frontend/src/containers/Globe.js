@@ -14,11 +14,12 @@ class Globe extends Component {
         // e.bindPopup("I have just clicked this marker.").openPopup();
 
         return ()=> {
-        // console.log(e.target)
-        // e.target.openPopup();
 
-        this.setState((state) => ({ read_articles: state.read_articles.concat(id) }))
-        console.log(this.state  )
+        //check if the id is in list already
+        if (!this.state.read_articles.includes(id)){
+          this.setState((state) => ({ read_articles: state.read_articles.concat(id) }))
+          console.log(this.state)
+        }
       }
   }
 
