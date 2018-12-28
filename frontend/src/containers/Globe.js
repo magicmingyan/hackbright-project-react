@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import $ from "jquery";
+import axios from 'axios';
 
 
 class Globe extends Component {
@@ -16,10 +17,13 @@ class Globe extends Component {
         return ()=> {
 
         //check if the id is in list already
-        if (!this.state.read_articles.includes(id)){
-          this.setState((state) => ({ read_articles: state.read_articles.concat(id) }))
+        // if (!this.state.read_articles.includes(id)){
+        //   // this.setState((state) => ({ read_articles: state.read_articles.concat(id) }))
+        // }
+          this.setState((state) => ({read_articles: id}))
           console.log(this.state)
-        }
+          axios.post('http://localhost:5000/read_articles', {read_articles: this.state.read_articles})
+        
       }
   }
 

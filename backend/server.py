@@ -2,9 +2,11 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, jsonify, request, session
 from flask_cors import CORS, cross_origin
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, User
+from model import connect_to_db, db, User, Reading_event, Article
 import requests
 import os
+import time
+import calendar
 
 template_dir = os.path.abspath('../frontend/public')
 app = Flask(__name__, template_folder=template_dir)
@@ -86,6 +88,8 @@ def login():
             return "password incorrect"
 
         session["user_id"] = user.user_id
+        print("hello")
+        print(session["user_id"])
         return "logged in"
 
 
@@ -103,6 +107,27 @@ def signup():
     db.session.commit()
 
     return "signed up"
+
+
+@app.route('/read_articles', methods = ['POST'])
+@cross_origin()
+def track_reading():
+    data = request.get_json(silent=True)
+    read_articles = data.get('read_articles')
+
+    my_var = session.get('user_id', None)
+
+    print(my_var)
+    
+    new_article = Article(article_id=read_articles)
+    db.session.add(new_article)
+    db.session.commit()
+
+    new_reading_event = Reading_event(timestamp=calendar.timegm(time.gmtime()), user_id=1, article_id=read_articles)
+    db.session.add(new_reading_event)
+
+    db.session.commit()
+    return "tracked"
 
 #---------------------------------------------------------------------#
 

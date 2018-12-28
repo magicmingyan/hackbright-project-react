@@ -27,7 +27,7 @@ class Article(db.Model):
 
     __tablename__ = "articles"
 
-    article_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    article_id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
     article_title = db.Column(db.String(64), nullable=True)
     news_source = db.Column(db.String(64), nullable=True)
     geo_id = db.Column(db.Integer, db.ForeignKey('geos.geo_id'), nullable=True)
@@ -79,9 +79,9 @@ class Reading_event(db.Model):
 
     __tablename__ = "reading_event"
 
-    timestamp = db.Column(db.TIMESTAMP, nullable=True,primary_key=True)
+    timestamp = db.Column(db.BigInteger, nullable=True,primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True, nullable=True)
-    article_id = db.Column(db.String(64), db.ForeignKey('articles.article_id'), nullable=True, primary_key=True)
+    article_id = db.Column(db.BigInteger, db.ForeignKey('articles.article_id'), nullable=True, primary_key=True)
 
     def __repr__(self):
         """Provide helpful representatio when printed."""
