@@ -1,12 +1,12 @@
 """Load bear data into database."""
 
-from model import Bear, connect_to_db, db
+from model import Article, connect_to_db, db
 from server import app
 
 #---------------------------------------------------------------------#
 
-def get_bears():
-    """Load bears from dataset into database."""
+def get_articles():
+    """Load artiles from nytimes api into database."""
 
     for i, row in enumerate(open('data/bear_data.csv')):
         data = row.rstrip().split(",")
@@ -33,4 +33,4 @@ if __name__ == '__main__':
     connect_to_db(app)
     db.create_all()
 
-    get_bears()
+    get_articles()
