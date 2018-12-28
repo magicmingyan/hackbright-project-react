@@ -23,6 +23,7 @@ class Globe extends Component {
       }
   }
 
+
   componentDidMount() {
 
 
