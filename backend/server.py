@@ -50,7 +50,6 @@ def get_NYT_articles():
             article["latitude"] = geo_response_dict['results'][0]['latitude']
             article["longitude"] = geo_response_dict['results'][0]['longitude']
 
-
     return filtered_articles
 
 
@@ -118,7 +117,7 @@ def track_reading():
     my_var = session.get('user_id', None)
 
     print(my_var)
-    
+
     new_article = Article(article_id=read_articles)
     db.session.add(new_article)
     db.session.commit()
