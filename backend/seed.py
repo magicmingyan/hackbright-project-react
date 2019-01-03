@@ -38,7 +38,6 @@ def get_NYT_articles():
 
     return filtered_articles
 
-
 def get_articles():
     """Load artiles from nytimes api into database."""
 
