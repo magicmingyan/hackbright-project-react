@@ -29,6 +29,7 @@ class Article(db.Model):
 
     article_id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
     article_title = db.Column(db.String, nullable=True)
+    abstract = db.Column(db.String, nullable=True)
     news_source = db.Column(db.String(64), nullable=True)
     geo_facet = db.Column(db.String(64), db.ForeignKey('geos.geo_facet'), nullable=True)
     lat = db.Column(db.Float, nullable=True)

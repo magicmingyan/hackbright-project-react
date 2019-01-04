@@ -46,6 +46,7 @@ def get_NYT_articles():
             new_article = Article(article_id=article['id'],
                                     article_title=article['title'],
                                     news_source="nytimes",
+                                    abstract=article['abstract'],
                                     geo_facet=geo_response_dict['results'][0]['name'],
                                     lat=geo_response_dict['results'][0]['latitude'],
                                     longt=geo_response_dict['results'][0]['longitude'],

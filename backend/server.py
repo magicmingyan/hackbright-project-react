@@ -71,7 +71,7 @@ def geo_info():
     all_articles = {}
     articles = Article.query.all()
     for article in articles:
-        all_articles[article.article_id] = {"title":article.article_title}
+        all_articles[article.article_id] = {"title":article.article_title, "abstract":article.abstract}
     # return jsonify(get_NYT_articles())
     return jsonify(all_articles)
 
