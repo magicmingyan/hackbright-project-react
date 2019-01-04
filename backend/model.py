@@ -28,14 +28,15 @@ class Article(db.Model):
     __tablename__ = "articles"
 
     article_id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
-    article_title = db.Column(db.String(64), nullable=True)
+    article_title = db.Column(db.String, nullable=True)
     news_source = db.Column(db.String(64), nullable=True)
-    geo_id = db.Column(db.Integer, db.ForeignKey('geos.geo_id'), nullable=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'), nullable=True)
+    geo_facet = db.Column(db.String(64), db.ForeignKey('geos.geo_facet'), nullable=True)
+    lat = db.Column(db.Float, nullable=True)
+    longt = db.Column(db.Float, nullable=True)
+    category = db.Column(db.String(64), nullable=True)
     num_reads = db.Column(db.Integer, nullable=True)
 
     geo = db.relationship('Geo')
-    category = db.relationship('Category')
 
     def __repr__(self):
         """Provide helpful representatio when printed."""
@@ -46,11 +47,9 @@ class Geo(db.Model):
     """Geos of interest to place the pin"""
 
     __tablename__ = "geos"
-
-    geo_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    lat = db.Column(db.Float, autoincrement=True, nullable=True)
-    longt = db.Column(db.Float, autoincrement=True, nullable=True)
-    town_name = db.Column(db.String(64), nullable=True)
+    geo_facet = db.Column(db.String(64), nullable=True, primary_key=True)
+    lat = db.Column(db.Float, nullable=True)
+    longt = db.Column(db.Float, nullable=True)
     country_name = db.Column(db.String(64), nullable=True)
     num_reads = db.Column(db.Integer, nullable=True)
 
@@ -60,18 +59,6 @@ class Geo(db.Model):
         return "<Geo geo_id={} town_name={}>".format(self.geo_id, self.town_name)
 
 
-class Category(db.Model):
-    """Categories of the articles"""
-
-    __tablename__ = "categories"
-
-    category_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    category_name = db.Column(db.String(64), nullable=True)
-
-    def __repr__(self):
-        """Provide helpful representatio when printed."""
-
-        return "<Category category_id={} category_name={}>".format(self.category_id, self.category_name)
 
 
 class Reading_event(db.Model):
