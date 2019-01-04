@@ -66,7 +66,14 @@ def index():
 def geo_info():
     """JSON information about geo."""
 
-    return jsonify(get_NYT_articles())
+
+    # return jsonify(get_NYT_articles())
+    all_articles = {}
+    articles = Article.query.all()
+    for article in articles:
+        all_articles[article.article_id] = {"title":article.article_title}
+    # return jsonify(get_NYT_articles())
+    return jsonify(all_articles)
 
 
 @app.route('/login', methods = ['GET', 'POST'])

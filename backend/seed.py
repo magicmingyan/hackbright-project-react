@@ -54,27 +54,6 @@ def get_NYT_articles():
 
     db.session.commit()
 
-# def get_articles():
-#     """Load artiles from nytimes api into database."""
-
-#     for i, row in enumerate(open('data/bear_data.csv')):
-#         data = row.rstrip().split(",")
-#         bear_id, gender, birth_yr, cap_yr, cap_lat, cap_long, collared = data
-
-#         bear = Bear(bear_id=bear_id,
-#                     gender=gender,
-#                     birth_year=birth_yr,
-#                     cap_year=cap_yr,
-#                     cap_lat=cap_lat,
-#                     cap_long=cap_long,
-#                     collared=collared)
-
-#         db.session.add(bear)
-
-#         if i % 100 == 0:
-#             print(i)
-
-#     db.session.commit()
 
 #---------------------------------------------------------------------#
 
