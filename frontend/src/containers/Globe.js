@@ -43,7 +43,7 @@ class Globe extends Component {
         let geo;
         for (let key in geos) {
               geo = geos[key];
-              var marker = window.WE.marker([geo.latitude, geo.longitude, geo.url])
+              var marker = window.WE.marker([geo.latitude, geo.longitude])
                 .addTo(earth)
                 .bindPopup(geo.title+"<br/><br/>"+geo.abstract, {maxWidth: 300, closeButton: true})
                 .on('click', this.onMarkerClick(geo.id))

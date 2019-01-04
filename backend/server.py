@@ -71,7 +71,11 @@ def geo_info():
     all_articles = {}
     articles = Article.query.all()
     for article in articles:
-        all_articles[article.article_id] = {"title":article.article_title, "abstract":article.abstract}
+        all_articles[article.article_id] = {"title":article.article_title, 
+                                            "abstract":article.abstract,
+                                            "latitude":article.lat,
+                                            "longitude":article.longt,
+                                            "id":article.article_id}
     # return jsonify(get_NYT_articles())
     return jsonify(all_articles)
 
@@ -125,9 +129,6 @@ def track_reading():
 
     print(my_var)
 
-    new_article = Article(article_id=read_articles)
-    db.session.add(new_article)
-    db.session.commit()
 
     new_reading_event = Reading_event(timestamp=calendar.timegm(time.gmtime()), user_id=1, article_id=read_articles)
     db.session.add(new_reading_event)
