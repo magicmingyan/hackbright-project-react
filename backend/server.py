@@ -11,46 +11,9 @@ import calendar
 template_dir = os.path.abspath('../frontend/public')
 app = Flask(__name__, template_folder=template_dir)
 # CORS(app)
-CORS(app, resources={r"/*": {"origins": "*"}})
+# CORS(app, resources={r"/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/*": { r"supports_credentials":True, r"origins": r"http://localhost:3000" }})
 app.secret_key = "ursusmaritimus"
-app.jinja_env.undefined = StrictUndefined
-
-
-
-
-def get_NYT_articles():
-
-    parameters = {"api-key": os.environ["nytimes_api"], 
-                    "section": "World",
-                    "time-period": "7"
-                    }
-
-    article_request_string = "https://api.nytimes.com/svc/mostpopular/v2/mostviewed/{}/{}.json".format(parameters["section"],parameters["time-period"])
-    geo_request_string = "https://api.nytimes.com/svc/semantic/v2/geocodes/query.json"
-
-    article_response = requests.get(article_request_string, params=parameters)
-    article_response_dict = article_response.json()
-    articles = article_response_dict['results']
-
-    filtered_articles = [article for article in articles if len(article["geo_facet"])>0]
-
-    for article in filtered_articles:
-        geo_facet = article["geo_facet"][0]
-        geo_facet = geo_facet.split('(')[0].title()  
-
-        # print(geo_facet)
-        geo_parameters = {"api-key": os.environ["nytimes_api"], 
-                    "name": geo_facet
-                    }
-
-        geo_response = requests.get(geo_request_string, params=geo_parameters)
-        geo_response_dict = geo_response.json()
-
-        if  len(geo_response_dict['results'])>0:
-            article["latitude"] = geo_response_dict['results'][0]['latitude']
-            article["longitude"] = geo_response_dict['results'][0]['longitude']
-
-    return filtered_articles
 
 
 
@@ -65,7 +28,6 @@ def index():
 @app.route('/geo.json')
 def geo_info():
     """JSON information about geo."""
-
 
     # return jsonify(get_NYT_articles())
     all_articles = {}
@@ -97,9 +59,11 @@ def login():
         if user.password != password:
             return "password incorrect"
 
+
         session["user_id"] = user.user_id
+        session.modified = True
         print("hello")
-        print(session["user_id"])
+        print(session.get('user_id', None))
         return "logged in"
 
 
@@ -122,19 +86,25 @@ def signup():
 @app.route('/read_articles', methods = ['POST'])
 @cross_origin()
 def track_reading():
-    data = request.get_json(silent=True)
-    read_articles = data.get('read_articles')
+    data = request.data.decode('utf-8')
+    # read_articles = data.get('read_articles')
 
     my_var = session.get('user_id', None)
-
     print(my_var)
+    for key in session:
+        print(key)
 
 
-    new_reading_event = Reading_event(timestamp=calendar.timegm(time.gmtime()), user_id=1, article_id=read_articles)
-    db.session.add(new_reading_event)
+    # new_reading_event = Reading_event(timestamp=calendar.timegm(time.gmtime()), user_id=1, article_id=read_articles)
+    # db.session.add(new_reading_event)
 
-    db.session.commit()
+    # db.session.commit()
     return "tracked"
+
+@app.after_request
+def after(response):
+  response.headers.add('Access-Control-Allow-Credentials', 'true')
+  return response
 
 #---------------------------------------------------------------------#
 
@@ -142,7 +112,7 @@ def track_reading():
 
 if __name__ == "__main__":
     app.debug = True
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    cors = CORS(app, resources={r"/*": { r"supports_credentials":True, r"origins": r"http://localhost:3000" }})
     connect_to_db(app)
     DebugToolbarExtension(app)
 
