@@ -29,7 +29,7 @@ class Login extends Component {
 		axios.post('http://localhost:5000/login', {email: this.state.email, password: this.state.password})
 		.then(response => {
 
- 			if(response.data == "logged in"){
+ 			if(response.data.hasOwnProperty('tocken') > -1){
 				 console.log("Login successfull");
 				 console.log(this)
 				 this.props.history.push("/globe");
