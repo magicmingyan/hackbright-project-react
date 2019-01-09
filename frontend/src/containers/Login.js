@@ -29,9 +29,10 @@ class Login extends Component {
 		axios.post('http://localhost:5000/login', {email: this.state.email, password: this.state.password})
 		.then(response => {
 
- 			if(response.data.hasOwnProperty('tocken') > -1){
+ 			if(response.data.hasOwnProperty('token')){
 				 console.log("Login successfull");
-				 console.log(this)
+				 console.log(response)
+				 window.localStorage.setItem('token', response.data.token);
 				 this.props.history.push("/globe");
 			 }
  			else if(response.data == "password incorrect"){

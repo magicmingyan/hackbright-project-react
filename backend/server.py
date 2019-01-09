@@ -32,10 +32,12 @@ def token_required(f):
             token = request.headers['x-access-token']
 
         if not token:
+            print("no tocken")
             return jsonify({'message' : 'Token is missing!'}), 401
 
         try: 
             data = jwt.decode(token, app.config['SECRET_KEY'])
+            print("found user")
             current_user = User.query.filter_by(public_id=data['public_id']).first()
         except:
             return jsonify({'message' : 'Token is invalid!'}), 401
@@ -90,6 +92,8 @@ def login():
 
     if check_password_hash(user.password, password):
         token = jwt.encode({'public_id' : user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+        print(token)
+        session["user_id"] = user.user_id
         return jsonify({'token' : token.decode('UTF-8')})
 
     return "password incorrect"
@@ -131,8 +135,8 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
-    session["public_id"] = new_user.public_id
-    print(session.get('public_id', None))
+    session["user_id"] = new_user.public_id
+    print(session.get('user_id', None))
 
     # return jsonify({'message' : 'New user created!'})
     return "signed up"
@@ -146,7 +150,7 @@ def track_reading(current_user):
     # read_articles = data.get('read_articles')
 
     my_var = session.get('user_id', None)
-    print(my_var)
+    print("user_id",my_var)
     for key in session:
         print(key)
 
@@ -168,7 +172,7 @@ def after(response):
 
 if __name__ == "__main__":
     app.debug = True
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    # CORS(app, resources={r"/*": {"origins": "*"}})
     # cors = CORS(app, resources={r"/*": { r"supports_credentials":True, r"origins": r"http://localhost:3000" }})
     connect_to_db(app)
     DebugToolbarExtension(app)

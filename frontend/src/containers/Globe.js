@@ -18,6 +18,7 @@ class Globe extends Component {
           console.log(this.state)
 
           fetch('http://localhost:5000/read_articles', {
+            headers: {'x-access-token': window.localStorage.getItem('token')},
             credentials: 'include',
             method: 'POST',
             body: this.state.read_articles
