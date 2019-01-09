@@ -32,13 +32,12 @@ def token_required(f):
             token = request.headers['x-access-token']
 
         if not token:
-            print("no tocken")
             return jsonify({'message' : 'Token is missing!'}), 401
 
         try: 
             data = jwt.decode(token, app.config['SECRET_KEY'])
-            print("found user")
             current_user = User.query.filter_by(public_id=data['public_id']).first()
+            # print(current_user)
         except:
             return jsonify({'message' : 'Token is invalid!'}), 401
 
@@ -148,17 +147,12 @@ def signup():
 def track_reading(current_user):
     data = request.data.decode('utf-8')
     # read_articles = data.get('read_articles')
-
+    print(current_user.user_id)
     my_var = session.get('user_id', None)
-    print("user_id",my_var)
-    for key in session:
-        print(key)
 
-
-    # new_reading_event = Reading_event(timestamp=calendar.timegm(time.gmtime()), user_id=1, article_id=read_articles)
-    # db.session.add(new_reading_event)
-
-    # db.session.commit()
+    new_reading_event = Reading_event(timestamp=calendar.timegm(time.gmtime()), user_id=current_user.user_id, article_id=data)
+    db.session.add(new_reading_event)
+    db.session.commit()
     return "tracked"
 
 @app.after_request
