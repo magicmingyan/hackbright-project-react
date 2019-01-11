@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from "jquery";
 import axios from 'axios';
+import ProgressBarExample from "./Progressbar";
 
 
 class Globe extends Component {
@@ -34,7 +35,7 @@ class Globe extends Component {
                 scrollWheelZoom: true
                 });
 
-    window.WE.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(earth);
+    window.WE.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png').addTo(earth);
 
     fetch('http://localhost:5000/geo.json',  {
             method: 'GET',
@@ -53,15 +54,15 @@ class Globe extends Component {
                   ;
             }
           }
-    
         );
-
   }
 
   render() {
     return (
-
+      <>
       <div id="earth_div"></div>
+      <ProgressBarExample />
+      </>
     );
   }
 }
