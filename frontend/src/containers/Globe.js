@@ -57,7 +57,7 @@ class Globe extends Component {
                   this.setState({ total_available_count: this.state.total_available_count + 1 })
                   var marker = window.WE.marker([geo.latitude, geo.longitude])
                     .addTo(earth)
-                    .bindPopup(geo.title+"<br/><br/>"+geo.abstract, {maxWidth: 300, closeButton: true})
+                    .bindPopup('<div>geo.title</div><br/><br/><div>geo.abstract</div>', {maxWidth: 300, closeButton: true})
                     .on('click', this.onMarkerClick(geo.id))
                   ;
             }
