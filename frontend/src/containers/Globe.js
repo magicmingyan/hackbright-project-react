@@ -8,7 +8,10 @@ class Globe extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      read_articles: []
+      read_articles: [],
+      total_articles_read: [],
+      total_read_count: 0,
+      total_available_count: 0
     }
   }
 
@@ -16,6 +19,10 @@ class Globe extends Component {
         // e.bindPopup("I have just clicked this marker.").openPopup();
         return ()=> {
           this.setState((state) => ({read_articles: id}))
+          if (!this.state.total_articles_read.includes(id)){
+            this.setState({total_articles_read: this.state.total_articles_read.concat([id])});
+          } 
+          this.setState((state) => ({total_read_count: this.state.total_articles_read.length}))
           console.log(this.state)
 
           fetch('http://localhost:5000/read_articles', {
@@ -47,6 +54,7 @@ class Globe extends Component {
             let geo;
             for (let key in geos) {
                   geo = geos[key];
+                  this.setState({ total_available_count: this.state.total_available_count + 1 })
                   var marker = window.WE.marker([geo.latitude, geo.longitude])
                     .addTo(earth)
                     .bindPopup(geo.title+"<br/><br/>"+geo.abstract, {maxWidth: 300, closeButton: true})
@@ -61,7 +69,9 @@ class Globe extends Component {
     return (
       <>
       <div id="earth_div"></div>
-      <ProgressBarExample />
+      <ProgressBarExample 
+        total_read_count={this.state.total_read_count} 
+        total_available_count={this.state.total_available_count} />
       </>
     );
   }
