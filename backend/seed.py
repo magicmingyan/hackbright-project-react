@@ -50,7 +50,8 @@ def get_NYT_articles():
                                     geo_facet=geo_response_dict['results'][0]['name'],
                                     lat=geo_response_dict['results'][0]['latitude'],
                                     longt=geo_response_dict['results'][0]['longitude'],
-                                    category=article['section'])
+                                    category=article['section'],
+                                    url=article['url'])
             db.session.add(new_article)
 
     db.session.commit()

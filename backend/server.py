@@ -66,7 +66,8 @@ def geo_info():
                                             "abstract":article.abstract,
                                             "latitude":article.lat,
                                             "longitude":article.longt,
-                                            "id":article.article_id}
+                                            "id":article.article_id,
+                                            "url":article.url}
     # return jsonify(get_NYT_articles())
     return jsonify(all_articles)
 

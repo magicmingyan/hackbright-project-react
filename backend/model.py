@@ -37,6 +37,7 @@ class Article(db.Model):
     longt = db.Column(db.Float, nullable=True)
     category = db.Column(db.String(64), nullable=True)
     num_reads = db.Column(db.Integer, nullable=True)
+    url = db.Column(db.String(200),nullable=True)
 
     geo = db.relationship('Geo')
 
