@@ -62,8 +62,6 @@ class Geo(db.Model):
         return "<Geo geo_id={} town_name={}>".format(self.geo_id, self.town_name)
 
 
-
-
 class Reading_event(db.Model):
     """Reading time of article by user"""
 
