@@ -15,13 +15,25 @@ class Globe extends Component {
     }
   }
 
-  onMarkerClick = (id) => {
-        // e.bindPopup("I have just clicked this marker.").openPopup();
+  onMarkerClick = (geo, earth) => {
+
         return ()=> {
-          this.setState((state) => ({read_articles: id}))
-          if (!this.state.total_articles_read.includes(id)){
-            this.setState({total_articles_read: this.state.total_articles_read.concat([id])});
+
+          var read_marker = window.WE.marker([geo.latitude, geo.longitude],'https://worldisbeautiful.net/tpl/img/icon-marker-focus.png')
+                    .addTo(earth)
+                    .bindPopup('<a href={url}>{title}</a><br/><br/>'
+                                .replace('{title}',geo.title)
+                                .replace('{url}', geo.url)
+                              +geo.abstract, {maxWidth: 300, 
+                              closeButton: true})
+                   
+
+          this.setState((state) => ({read_articles: geo.id}))
+
+          if (!this.state.total_articles_read.includes(geo.id)){
+            this.setState({total_articles_read: this.state.total_articles_read.concat([geo.id])});
           } 
+
           this.setState((state) => ({total_read_count: this.state.total_articles_read.length}))
           console.log(this.state)
 
@@ -52,13 +64,12 @@ class Globe extends Component {
         .then(
 
           geos => {        
-            var marker1 = window.WE.marker([7.10304, 0.607458]).addTo(earth);
-                marker1.bindPopup( '<div class="html-pop-content" data-titre="Wli Waterfalls" data-y="2019" data-m="01" data-d="07" data-img="Ghana _ Wli Waterfalls" data-pays="Ghana" data-iso="gh"></div>');
+            // var marker1 = window.WE.marker([7.10304, 0.607458]).addTo(earth);
+            //     marker1.bindPopup( '<div class="html-pop-content" data-titre="Wli Waterfalls" data-y="2019" data-m="01" data-d="07" data-img="Ghana _ Wli Waterfalls" data-pays="Ghana" data-iso="gh"></div>');
             
-            var marker142 = window.WE.marker([-8.65163, 119.58], '../tpl/img/icon-marker-focus.png', 25, 41).addTo(earth);
-                marker142.bindPopup( '<div class="html-pop-content" data-titre="Komodo National Park" data-y="2016" data-m="04" data-d="25" data-img="Indonesia _ Komodo National Park" data-pays="Indonesia" data-iso="id"></div>' );
-              
-
+            // var marker142 = window.WE.marker([-8.65163, 119.58], '../tpl/img/icon-marker-focus.png', 25, 41).addTo(earth);
+            //     marker142.bindPopup( '<div class="html-pop-content" data-titre="Komodo National Park" data-y="2016" data-m="04" data-d="25" data-img="Indonesia _ Komodo National Park" data-pays="Indonesia" data-iso="id"></div>' );
+            
             let geo;
             for (let key in geos) {
                   geo = geos[key];
@@ -70,7 +81,7 @@ class Globe extends Component {
                                 .replace('{url}', geo.url)
                               +geo.abstract, {maxWidth: 300, 
                               closeButton: true})
-                    .on('click', this.onMarkerClick(geo.id))
+                    .on('click', this.onMarkerClick(geo, earth))
                   ;
             }
           }
