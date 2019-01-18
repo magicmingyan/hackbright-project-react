@@ -64,12 +64,6 @@ class Globe extends Component {
         .then(
 
           geos => {        
-            // var marker1 = window.WE.marker([7.10304, 0.607458]).addTo(earth);
-            //     marker1.bindPopup( '<div class="html-pop-content" data-titre="Wli Waterfalls" data-y="2019" data-m="01" data-d="07" data-img="Ghana _ Wli Waterfalls" data-pays="Ghana" data-iso="gh"></div>');
-            
-            // var marker142 = window.WE.marker([-8.65163, 119.58], '../tpl/img/icon-marker-focus.png', 25, 41).addTo(earth);
-            //     marker142.bindPopup( '<div class="html-pop-content" data-titre="Komodo National Park" data-y="2016" data-m="04" data-d="25" data-img="Indonesia _ Komodo National Park" data-pays="Indonesia" data-iso="id"></div>' );
-            
             let geo;
             for (let key in geos) {
                   geo = geos[key];

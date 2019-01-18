@@ -68,8 +68,22 @@ def geo_info():
                                             "longitude":article.longt,
                                             "id":article.article_id,
                                             "url":article.url}
-    # return jsonify(get_NYT_articles())
     return jsonify(all_articles)
+
+
+@app.route('/read_event.json')
+@token_required
+def read_info(current_user):
+    """JSON information about if the user read an article already."""
+    read_info = set()
+
+    data = Reading_event.query.filter_by(user_id=current_user.user_id).all()
+    for entry in data:
+        read_info.add(entry.article_id)
+
+    read_info_list = list(read_info)    
+
+    return jsonify(read_info_list)
 
 
 @app.route('/login', methods = ['POST'])
@@ -92,8 +106,7 @@ def login():
 
     if check_password_hash(user.password, password):
         token = jwt.encode({'public_id' : user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
-        print(token)
-        session["user_id"] = user.user_id
+
         return jsonify({'token' : token.decode('UTF-8')})
 
     return "password incorrect"
