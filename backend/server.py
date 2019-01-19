@@ -148,11 +148,8 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
-    session["user_id"] = new_user.public_id
-    print(session.get('user_id', None))
-
-    # return jsonify({'message' : 'New user created!'})
-    return "signed up"
+    token = jwt.encode({'public_id' : new_user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+    return jsonify({'token' : token.decode('UTF-8')})
 
 
 @app.route('/read_articles', methods = ['POST'])

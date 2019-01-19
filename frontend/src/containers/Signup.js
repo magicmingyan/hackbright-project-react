@@ -34,8 +34,9 @@ class Signup extends Component {
 					{user_name: this.state.user_name, email: this.state.email, password: this.state.password})
 		.then(response => {
 
- 			if(response.data == "signed up"){
+ 			if(response.data.hasOwnProperty('token')){
 				 console.log("signed up");
+				 window.localStorage.setItem('token', response.data.token);
 				 this.props.history.push("/globe");
 			 }
  			else{
