@@ -35,12 +35,10 @@ class Signup extends Component {
 		.then(response => {
 
  			if(response.data.hasOwnProperty('token')){
-				 console.log("signed up");
 				 window.localStorage.setItem('token', response.data.token);
 				 this.props.history.push("/globe");
 			 }
  			else{
-				 console.log("Signup not successful");
 				 alert("Signup not successful");
  			}
  		})

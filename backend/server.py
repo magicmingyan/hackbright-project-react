@@ -14,7 +14,6 @@ import jwt
 from functools import wraps
 
 
-
 template_dir = os.path.abspath('../frontend/public')
 app = Flask(__name__, template_folder=template_dir)
 # CORS(app)
@@ -37,7 +36,7 @@ def token_required(f):
         try: 
             data = jwt.decode(token, app.config['SECRET_KEY'])
             current_user = User.query.filter_by(public_id=data['public_id']).first()
-            # print(current_user)
+
         except:
             return jsonify({'message' : 'Token is invalid!'}), 401
 
@@ -80,7 +79,6 @@ def read_info(current_user):
     data = Reading_event.query.filter_by(user_id=current_user.user_id).all()
     for entry in data:
         read_info.add(entry.article_id)
-
     read_info_list = list(read_info)    
 
     return jsonify(read_info_list)
@@ -111,33 +109,10 @@ def login():
 
     return "password incorrect"
 
-
-        # data = request.get_json(silent=True)
-
-        # email = data.get('email')
-        # password = data.get('password')
-
-        # user = User.query.filter_by(email=email).first()
-
-        # if not user:
-        #     return "no user"
-        
-        # if user.password != password:
-        #     return "password incorrect"
-
-
-        # session["user_id"] = user.user_id
-        # session.modified = True
-        # print("hello")
-        # print(session.get('user_id', None))
-        # return "logged in"
-
-
 @app.route('/signup', methods = ['POST'])
 @cross_origin()
 def signup():
     data = request.get_json()
-    print("data", data)
     user_name = data.get('user_name')
     email = data.get('email')
     password = data.get('password')

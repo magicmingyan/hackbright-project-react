@@ -30,17 +30,13 @@ class Login extends Component {
 		.then(response => {
 
  			if(response.data.hasOwnProperty('token')){
-				 console.log("Login successfull");
-				 console.log(response)
 				 window.localStorage.setItem('token', response.data.token);
 				 this.props.history.push("/globe");
 			 }
  			else if(response.data == "password incorrect"){
-				 console.log("Username password do not match");
 				 alert("username password do not match")
 			 }
  			else{
-				 console.log("Username does not exists");
 				 alert("Username does not exist");
  			}
  		})
