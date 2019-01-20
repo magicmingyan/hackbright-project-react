@@ -46,8 +46,6 @@ class Globe extends Component {
 
   componentDidMount() {
   
-    console.log(this.state)
-
     const earth = new window.WE.map('earth_div',{
                 zoom: 3,
                 scrollWheelZoom: true
@@ -90,7 +88,7 @@ class Globe extends Component {
                     for (let key in geos) {
                           geo = geos[key];
                           this.setState({ total_available_count: this.state.total_available_count + 1 })
-                          console.log(this.state.total_articles_read)
+
                           if (!this.state.total_articles_read.includes(geo.id)){
                               var marker = window.WE.marker([geo.latitude, geo.longitude])
                                 .addTo(earth)

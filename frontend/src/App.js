@@ -21,7 +21,6 @@ class App extends Component {
               <Navbar.Brand>
                 <Link to="/">Home</Link>
               </Navbar.Brand>
-              <Navbar.Toggle />
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav pullRight>
@@ -40,7 +39,6 @@ class App extends Component {
               <Navbar.Brand>
                 <Link to="/">Home</Link>
               </Navbar.Brand>
-              <Navbar.Toggle />
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav pullRight>

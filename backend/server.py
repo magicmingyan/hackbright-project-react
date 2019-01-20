@@ -87,10 +87,7 @@ def read_info(current_user):
 @app.route('/login', methods = ['POST'])
 @cross_origin()
 def login():
-    # if request.method == 'POST':
-
     data = request.get_json(silent=True)
-    print(data)
     email = data.get('email')
     password = data.get('password')
 
@@ -118,6 +115,8 @@ def signup():
     password = data.get('password')
     hashed_password = generate_password_hash(password, method='sha256')
 
+    if User.query.filter_by(email=email).first():
+        return "Email already taken"
     new_user = User(public_id=str(uuid.uuid4()), user_name=user_name, email=email, password=hashed_password)
 
     db.session.add(new_user)
