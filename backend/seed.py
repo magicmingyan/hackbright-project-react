@@ -11,7 +11,7 @@ def get_NYT_articles():
 
     parameters = {"api-key": os.environ["nytimes_api"], 
                     "section": "World",
-                    "time-period": "7"
+                    "time-period": "1"
                     }
 
     article_request_string = "https://api.nytimes.com/svc/mostpopular/v2/mostviewed/{}/{}.json".format(parameters["section"],parameters["time-period"])
@@ -32,8 +32,11 @@ def get_NYT_articles():
 
         geo_response = requests.get(geo_request_string, params=geo_parameters)
         geo_response_dict = geo_response.json()
+        print(geo_response_dict)
 
-        if  len(geo_response_dict['results'])>0 and not Geo.query.filter_by(geo_facet=geo_response_dict['results'][0]['name']).first():
+        if ('results' in geo_response_dict
+                and len(geo_response_dict['results'])>0 
+                and not Geo.query.filter_by(geo_facet=geo_response_dict['results'][0]['name']).first()):
 
             new_geo = Geo(geo_facet=geo_response_dict['results'][0]['name'],
                             lat=geo_response_dict['results'][0]['latitude'],
@@ -41,16 +44,17 @@ def get_NYT_articles():
                             country_name=geo_response_dict['results'][0]['country_name'])
             db.session.add(new_geo)
 
-            new_article = Article(article_id=article['id'],
-                                    article_title=article['title'],
-                                    news_source="nytimes",
-                                    abstract=article['abstract'],
-                                    geo_facet=geo_response_dict['results'][0]['name'],
-                                    lat=geo_response_dict['results'][0]['latitude'],
-                                    longt=geo_response_dict['results'][0]['longitude'],
-                                    category=article['section'],
-                                    url=article['url'])
-            db.session.add(new_article)
+            if not Article.query.filter_by(article_id=article['id']).first():
+                new_article = Article(article_id=article['id'],
+                                        article_title=article['title'],
+                                        news_source="nytimes",
+                                        abstract=article['abstract'],
+                                        geo_facet=geo_response_dict['results'][0]['name'],
+                                        lat=geo_response_dict['results'][0]['latitude'],
+                                        longt=geo_response_dict['results'][0]['longitude'],
+                                        category=article['section'],
+                                        url=article['url'])
+                db.session.add(new_article)
 
     db.session.commit()
 
