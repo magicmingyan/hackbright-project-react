@@ -32,11 +32,10 @@ def get_NYT_articles():
 
         geo_response = requests.get(geo_request_string, params=geo_parameters)
         geo_response_dict = geo_response.json()
-        print(geo_response_dict)
 
         if ('results' in geo_response_dict
-                and len(geo_response_dict['results'])>0 
-                and not Geo.query.filter_by(geo_facet=geo_response_dict['results'][0]['name']).first()):
+            and len(geo_response_dict['results'])>0 
+            and not Geo.query.filter_by(geo_facet=geo_response_dict['results'][0]['name']).first()):
 
             new_geo = Geo(geo_facet=geo_response_dict['results'][0]['name'],
                             lat=geo_response_dict['results'][0]['latitude'],
