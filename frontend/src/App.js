@@ -6,7 +6,6 @@ import Routes from "./Routes";
 
 class App extends Component {
 
-
   handleLogOut = () => {
     window.localStorage.removeItem('token')
   }

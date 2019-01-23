@@ -110,6 +110,7 @@ def login():
 def signup():
     data = request.get_json()
     user_name = data.get('user_name')
+    print(data)
     email = data.get('email')
     password = data.get('password')
     hashed_password = generate_password_hash(password, method='sha256')
@@ -120,6 +121,8 @@ def signup():
 
     db.session.add(new_user)
     db.session.commit()
+
+    print("hello")
 
     token = jwt.encode({'public_id' : new_user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
     return jsonify({'token' : token.decode('UTF-8')})
