@@ -3,7 +3,6 @@ import $ from "jquery";
 import axios from 'axios';
 import ProgressBarExample from "./Progressbar";
 
-
 class Globe extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +16,7 @@ class Globe extends Component {
 
   onMarkerClick = (geo, earth) => {
 
-        return ()=> {
+        return () => {
 
           var read_marker = window.WE.marker([geo.latitude, geo.longitude],'https://worldisbeautiful.net/tpl/img/icon-marker-focus.png')
                     .addTo(earth)
@@ -27,13 +26,13 @@ class Globe extends Component {
                               +geo.abstract, {maxWidth: 300, 
                               closeButton: true})
                    
-          this.setState((state) => ({read_articles: geo.id}))
+          this.setState({read_articles: geo.id})
 
           if (!this.state.total_articles_read.includes(geo.id)){
             this.setState({total_articles_read: this.state.total_articles_read.concat([geo.id])});
           } 
 
-          this.setState((state) => ({total_read_count: this.state.total_articles_read.length}))
+          this.setState({total_read_count: this.state.total_articles_read.length})
 
           fetch('http://localhost:5000/read_articles', {
             headers: {'x-access-token': window.localStorage.getItem('token')},
@@ -60,7 +59,6 @@ class Globe extends Component {
         })
         .then(response => { return response.json()})
         .then(
-
           read_events => {        
             let value;
             for (let key in read_events) {
@@ -69,41 +67,37 @@ class Globe extends Component {
                     this.setState({total_articles_read: this.state.total_articles_read.concat([value])});
                   } 
 
-                  this.setState((state) => ({total_read_count: this.state.total_articles_read.length}))
+                  this.setState({total_read_count: this.state.total_articles_read.length})
             }
           }
         )
-
         .then( ()=>(
             fetch('http://localhost:5000/geo.json',  {
                     method: 'GET',
                     credentials: 'include',
                 })
-                
                 .then(response => { return response.json()})
                 .then(
-
                   geos => {        
                     let geo;
                     for (let key in geos) {
-                          geo = geos[key];
-                          this.setState({ total_available_count: this.state.total_available_count + 1 })
+                        geo = geos[key];
+                        this.setState({ total_available_count: this.state.total_available_count + 1 })
 
-                          if (!this.state.total_articles_read.includes(geo.id)){
-                              var marker = window.WE.marker([geo.latitude, geo.longitude])
-                                .addTo(earth)
-                          } else {
-                              var marker = window.WE.marker([geo.latitude, geo.longitude],'https://worldisbeautiful.net/tpl/img/icon-marker-focus.png')
-                                .addTo(earth)
-                          }
-
-                          marker.bindPopup('<a href={url}>{title}</a><br/><br/>'
-                                        .replace('{title}',geo.title)
-                                        .replace('{url}', geo.url)
-                                      +geo.abstract, {maxWidth: 300, 
-                                      closeButton: true})
-                            .on('click', this.onMarkerClick(geo, earth))
-                          ;
+                        if (!this.state.total_articles_read.includes(geo.id)){
+                            var marker = window.WE.marker([geo.latitude, geo.longitude])
+                              .addTo(earth)
+                        } else {
+                            var marker = window.WE.marker([geo.latitude, geo.longitude],'https://worldisbeautiful.net/tpl/img/icon-marker-focus.png')
+                              .addTo(earth)
+                        }
+                        marker.bindPopup('<a href={url}>{title}</a><br/><br/>'
+                                      .replace('{title}',geo.title)
+                                      .replace('{url}', geo.url)
+                                    +geo.abstract, {maxWidth: 300, 
+                                    closeButton: true})
+                          .on('click', this.onMarkerClick(geo, earth))
+                        ;
                     }
                   }
                 )

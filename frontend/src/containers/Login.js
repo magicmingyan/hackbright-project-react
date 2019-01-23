@@ -13,7 +13,7 @@ class Login extends Component {
 	}
 
 	validateForm() {
-		return this.state.email.length > 0 && this.state.password.length >0;
+		return this.state.email.length > 0 && this.state.password.length > 0;
 	}
 
 	handleChange = event => {
@@ -28,7 +28,6 @@ class Login extends Component {
 		axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 		axios.post('http://localhost:5000/login', {email: this.state.email, password: this.state.password})
 		.then(response => {
-
  			if(response.data.hasOwnProperty('token')){
 				 window.localStorage.setItem('token', response.data.token);
 				 this.props.history.push("/globe");
