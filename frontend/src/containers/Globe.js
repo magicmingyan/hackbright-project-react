@@ -35,8 +35,6 @@ class Globe extends Component {
         }));
       }
 
-      console.log(this.state.total_articles_read.size);
-
       fetch("http://localhost:5000/read_articles", {
         headers: { "x-access-token": window.localStorage.getItem("token") },
         credentials: "include",
@@ -56,7 +54,6 @@ class Globe extends Component {
       "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
     ).addTo(earth);
 
-    // async function
     const first_request = async () => {
       const response = await fetch("http://localhost:5000/read_event.json", {
         headers: { "x-access-token": window.localStorage.getItem("token") },
@@ -64,65 +61,51 @@ class Globe extends Component {
         credentials: "include"
       });
       const read_events = await response.json();
-      console.log("read_event_outside_function:",read_events)
-      
-      const log_reading = async (read_events) => {
-        let value;
-        console.log("read_event_outside_function",read_events)
-        for (let key in read_events) {
-          value = read_events[key];
-          console.log("key", key)
-          if (!this.state.total_articles_read.has(value)) {
-            this.setState(({ total_articles_read }) => ({
-              total_articles_read: new Set(total_articles_read.add(value))
-            }));
-          }
-        }
-      };
 
-      await log_reading();
-      console.log("state:",this.state)
+      let value;
+      for (let key in read_events) {
+        value = read_events[key];
+        if (!this.state.total_articles_read.has(value)) {
+          let total_articles_read = new Set(
+            this.state.total_articles_read.add(value)
+          );
+          this.setState({ total_articles_read: total_articles_read });
+        }
+      }
     };
 
     const second_request = async () => {
       await first_request();
-      const history = fetch("http://localhost:5000/geo.json", {
+      const response = await fetch("http://localhost:5000/geo.json", {
         method: "GET",
         credentials: "include"
-      })
-        .then(response => {
-          return response.json();
-        })
-        .then(geos => {
-          let geo;
-          // console.log("second", this.state);
-          for (let key in geos) {
-            geo = geos[key];
-            this.setState({
-              total_available_count: this.state.total_available_count + 1
-            });
+      });
+      const articles = await response.json();
 
-            if (!this.state.total_articles_read.has(geo.id)) {
-              var marker = window.WE.marker([
-                geo.latitude,
-                geo.longitude
-              ]).addTo(earth);
-            } else {
-              var marker = window.WE.marker(
-                [geo.latitude, geo.longitude],
-                "https://worldisbeautiful.net/tpl/img/icon-marker-focus.png"
-              ).addTo(earth);
-            }
-            marker
-              .bindPopup(
-                "<a href={url}>{title}</a><br/><br/>"
-                  .replace("{title}", geo.title)
-                  .replace("{url}", geo.url) + geo.abstract,
-                { maxWidth: 300, closeButton: true }
-              )
-              .on("click", this.onMarkerClick(geo, earth));
-          }
+      let geo;
+      for (let key in articles) {
+        geo = articles[key];
+        this.setState({
+          total_available_count: this.state.total_available_count + 1
         });
+        let marker;
+        if (!this.state.total_articles_read.has(geo.id)) {
+          marker = window.WE.marker([geo.latitude, geo.longitude]).addTo(earth);
+        } else {
+          marker = window.WE.marker(
+            [geo.latitude, geo.longitude],
+            "https://worldisbeautiful.net/tpl/img/icon-marker-focus.png"
+          ).addTo(earth);
+        }
+        marker
+          .bindPopup(
+            "<a href={url}>{title}</a><br/><br/>"
+              .replace("{title}", geo.title)
+              .replace("{url}", geo.url) + geo.abstract,
+            { maxWidth: 300, closeButton: true }
+          )
+          .on("click", this.onMarkerClick(geo, earth));
+      }
     };
 
     second_request();
