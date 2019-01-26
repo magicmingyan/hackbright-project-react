@@ -57,63 +57,75 @@ class Globe extends Component {
     ).addTo(earth);
 
     // async function
-    fetch("http://localhost:5000/read_event.json", {
-      headers: { "x-access-token": window.localStorage.getItem("token") },
-      method: "GET",
-      credentials: "include"
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(read_events => {
+    const first_request = async () => {
+      const response = await fetch("http://localhost:5000/read_event.json", {
+        headers: { "x-access-token": window.localStorage.getItem("token") },
+        method: "GET",
+        credentials: "include"
+      });
+      const read_events = await response.json();
+      console.log("read_event_outside_function:",read_events)
+      
+      const log_reading = async (read_events) => {
         let value;
+        console.log("read_event_outside_function",read_events)
         for (let key in read_events) {
           value = read_events[key];
+          console.log("key", key)
           if (!this.state.total_articles_read.has(value)) {
             this.setState(({ total_articles_read }) => ({
               total_articles_read: new Set(total_articles_read.add(value))
             }));
           }
         }
-      })
-      .then(() =>
-        fetch("http://localhost:5000/geo.json", {
-          method: "GET",
-          credentials: "include"
-        })
-          .then(response => {
-            return response.json();
-          })
-          .then(geos => {
-            let geo;
-            for (let key in geos) {
-              geo = geos[key];
-              this.setState({
-                total_available_count: this.state.total_available_count + 1
-              });
+      };
 
-              if (!this.state.total_articles_read.has(geo.id)) {
-                var marker = window.WE.marker([
-                  geo.latitude,
-                  geo.longitude
-                ]).addTo(earth);
-              } else {
-                var marker = window.WE.marker(
-                  [geo.latitude, geo.longitude],
-                  "https://worldisbeautiful.net/tpl/img/icon-marker-focus.png"
-                ).addTo(earth);
-              }
-              marker
-                .bindPopup(
-                  "<a href={url}>{title}</a><br/><br/>"
-                    .replace("{title}", geo.title)
-                    .replace("{url}", geo.url) + geo.abstract,
-                  { maxWidth: 300, closeButton: true }
-                )
-                .on("click", this.onMarkerClick(geo, earth));
+      await log_reading();
+      console.log("state:",this.state)
+    };
+
+    const second_request = async () => {
+      await first_request();
+      const history = fetch("http://localhost:5000/geo.json", {
+        method: "GET",
+        credentials: "include"
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(geos => {
+          let geo;
+          // console.log("second", this.state);
+          for (let key in geos) {
+            geo = geos[key];
+            this.setState({
+              total_available_count: this.state.total_available_count + 1
+            });
+
+            if (!this.state.total_articles_read.has(geo.id)) {
+              var marker = window.WE.marker([
+                geo.latitude,
+                geo.longitude
+              ]).addTo(earth);
+            } else {
+              var marker = window.WE.marker(
+                [geo.latitude, geo.longitude],
+                "https://worldisbeautiful.net/tpl/img/icon-marker-focus.png"
+              ).addTo(earth);
             }
-          })
-      );
+            marker
+              .bindPopup(
+                "<a href={url}>{title}</a><br/><br/>"
+                  .replace("{title}", geo.title)
+                  .replace("{url}", geo.url) + geo.abstract,
+                { maxWidth: 300, closeButton: true }
+              )
+              .on("click", this.onMarkerClick(geo, earth));
+          }
+        });
+    };
+
+    second_request();
   }
 
   render() {
