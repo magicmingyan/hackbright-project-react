@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import axios from 'axios';
 import App from '../App'
+import Form from "./Form";
 
 class Login extends Component {
 	constructor(props) {
@@ -11,7 +11,7 @@ class Login extends Component {
 			password: ''
 		}
 	}
-	
+
 	validateForm() {
 		return this.state.email.length > 0 && this.state.password.length > 0;
 	}
@@ -45,52 +45,18 @@ class Login extends Component {
  	}
 
 	render() {
-		return (
-	      <div className="Login">
-	        <form onSubmit={this.handleSubmit}>
-	          <FormGroup controlId="email" bsSize="large">
-	            <ControlLabel>Email</ControlLabel>
-	            <FormControl
-	              autoFocus
-	              type="email"
-	              value={this.state.email}
-	              onChange={this.handleChange}
-	            />
-	          </FormGroup>
-
-	          <FormGroup controlId="password" bsSize="large">
-	            <ControlLabel>Password</ControlLabel>
-	            <FormControl
-	              type="password"
-	              value={this.state.password}
-	              onChange={this.handleChange}
-	            />
-	          </FormGroup>
-
-	          <Button
-	            block
-	            bsSize="large"
-	            disabled={!this.validateForm()}
-	            type="submit"
-	          >
-	            Login
-	          </Button>
-	        </form>
-
-	        <p>Dont have an account? </p>
-	        <form onSubmit={this.handleRegister}>
-	          <Button
-	            block
-	            bsSize="large"
-	            type="submit"
-	            href="/signup"
-	          >
-	            Signup
-	          </Button>
-	        </form>
-	      </div>
-					
-		);
+		return(
+		  <Form 
+		  	className="Login"
+		  	handleChange={this.handleChange}
+		  	handleSubmit={this.handleSubmit}
+		  	validateForm={this.validateForm}
+		  	user_name={this.state.user_name}
+		  	email={this.state.email}
+		  	password={this.state.password}
+		  	
+		  />
+		)
 	}
 }
 

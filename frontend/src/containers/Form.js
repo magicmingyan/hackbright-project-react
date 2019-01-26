@@ -9,17 +9,19 @@ class Form extends React.Component {
 
 	render() {
 		return (
-			<div className="Signup">
+			<div className={this.props.className}>
 				<form onSubmit={this.props.handleSubmit}>
-					<FormGroup controlId="user_name" bsSize="large">
-						<ControlLabel>User Name</ControlLabel>
-						<FormControl
-							autoFocus
-							type="user_name"
-							value={this.props.user_name}
-							onChange={this.props.handleChange}
-						/>
-					</FormGroup>
+					{this.props.className == "Signup" && (
+						<FormGroup controlId="user_name" bsSize="large">
+							<ControlLabel>User Name</ControlLabel>
+							<FormControl
+								autoFocus
+								type="user_name"
+								value={this.props.user_name}
+								onChange={this.props.handleChange}
+							/>
+						</FormGroup>
+					)}
 
 					<FormGroup controlId="email" bsSize="large">
 						<ControlLabel>Email</ControlLabel>
@@ -46,8 +48,37 @@ class Form extends React.Component {
 						disabled={!this.props.validateForm}
 						type="submit"
 					>
-						Signup
+						{this.props.className}
 					</Button>
+					{this.props.className != "Signup" ? (
+						<>
+							<p>Don't have an account? </p>
+							<form onSubmit={this.handleRegister}>
+								<Button
+									block
+									bsSize="large"
+									type="submit"
+									href="/signup"
+								>
+									Signup
+								</Button>
+							</form>
+						</>
+					) : (
+						<>
+							<p>Already have an account? </p>
+							<form onSubmit={this.handleRegister}>
+								<Button
+									block
+									bsSize="large"
+									type="submit"
+									href="/login"
+								>
+									Login
+								</Button>
+							</form>
+						</>
+					)}
 				</form>
 			</div>
 		);

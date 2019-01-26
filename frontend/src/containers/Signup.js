@@ -48,6 +48,7 @@ class Signup extends Component {
 	render() {
 		return(
 		  <Form 
+		  	className="Signup"
 		  	handleChange={this.handleChange}
 		  	handleSubmit={this.handleSubmit}
 		  	validateForm={this.validateForm}
