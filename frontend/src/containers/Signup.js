@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import axios from "axios";
 import App from "../App";
+import Form from "./Form";
 
 class Signup extends Component {
 	constructor(props) {
@@ -25,7 +25,6 @@ class Signup extends Component {
 
 	handleSubmit = event => {
 		event.preventDefault();
-		// $.post('http://localhost:5000/result', {email: this.state.email}, ()=>console.log("success!"))
 		axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 		axios
 			.post("http://localhost:5000/signup", {
@@ -47,49 +46,17 @@ class Signup extends Component {
 	};
 
 	render() {
-		return (
-			<div className="Signup">
-				<form onSubmit={this.handleSubmit}>
-					<FormGroup controlId="user_name" bsSize="large">
-						<ControlLabel>User Name</ControlLabel>
-						<FormControl
-							autoFocus
-							type="user_name"
-							value={this.state.user_name}
-							onChange={this.handleChange}
-						/>
-					</FormGroup>
-
-					<FormGroup controlId="email" bsSize="large">
-						<ControlLabel>Email</ControlLabel>
-						<FormControl
-							autoFocus
-							type="email"
-							value={this.state.email}
-							onChange={this.handleChange}
-						/>
-					</FormGroup>
-
-					<FormGroup controlId="password" bsSize="large">
-						<ControlLabel>Password</ControlLabel>
-						<FormControl
-							type="password"
-							value={this.state.password}
-							onChange={this.handleChange}
-						/>
-					</FormGroup>
-
-					<Button
-						block
-						bsSize="large"
-						disabled={!this.validateForm()}
-						type="submit"
-					>
-						Signup
-					</Button>
-				</form>
-			</div>
-		);
+		return(
+		  <Form 
+		  	handleChange={this.handleChange}
+		  	handleSubmit={this.handleSubmit}
+		  	validateForm={this.validateForm}
+		  	user_name={this.state.user_name}
+		  	email={this.state.email}
+		  	password={this.state.password}
+		  	
+		  />
+		)
 	}
 }
 

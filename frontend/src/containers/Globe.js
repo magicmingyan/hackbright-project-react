@@ -82,29 +82,29 @@ class Globe extends Component {
       });
       const articles = await response.json();
 
-      let geo;
+      let article;
       for (let key in articles) {
-        geo = articles[key];
+        article = articles[key];
         this.setState({
           total_available_count: this.state.total_available_count + 1
         });
         let marker;
-        if (!this.state.total_articles_read.has(geo.id)) {
-          marker = window.WE.marker([geo.latitude, geo.longitude]).addTo(earth);
+        if (!this.state.total_articles_read.has(article.id)) {
+          marker = window.WE.marker([article.latitude, article.longitude]).addTo(earth);
         } else {
           marker = window.WE.marker(
-            [geo.latitude, geo.longitude],
+            [article.latitude, article.longitude],
             "https://worldisbeautiful.net/tpl/img/icon-marker-focus.png"
           ).addTo(earth);
         }
         marker
           .bindPopup(
             "<a href={url}>{title}</a><br/><br/>"
-              .replace("{title}", geo.title)
-              .replace("{url}", geo.url) + geo.abstract,
+              .replace("{title}", article.title)
+              .replace("{url}", article.url) + article.abstract,
             { maxWidth: 300, closeButton: true }
           )
-          .on("click", this.onMarkerClick(geo, earth));
+          .on("click", this.onMarkerClick(article, earth));
       }
     };
 
