@@ -15,6 +15,7 @@ class App extends Component {
     if (window.localStorage.getItem('token')){
       return (
         <div className="App container">
+        
           <Navbar fluid collapseOnSelect>
             <Navbar.Header>
               <Navbar.Brand>
@@ -23,12 +24,15 @@ class App extends Component {
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav pullRight>
+                <NavItem href="/globe">Globe</NavItem>
                 <NavItem href="/" onClick={this.handleLogOut}>Logout</NavItem>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
           <Routes />
+
         </div>
+
         )
     } else {
       return (

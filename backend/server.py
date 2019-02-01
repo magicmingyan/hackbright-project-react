@@ -96,14 +96,11 @@ def login():
 
     user = User.query.filter_by(email=email).first()
 
-    if not email:
-        return "no user"
-
     if check_password_hash(user.password, password):
         token = jwt.encode({'public_id' : user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
         return jsonify({'token' : token.decode('UTF-8')})
 
-    return "password incorrect"
+    return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
 @app.route('/signup', methods = ['POST'])
 @cross_origin()
@@ -116,13 +113,11 @@ def signup():
     hashed_password = generate_password_hash(password, method='sha256')
 
     if User.query.filter_by(email=email).first():
-        return "Email already taken"
+        return jsonify({'message' : 'Email already taken!'}), 401
     new_user = User(public_id=str(uuid.uuid4()), user_name=user_name, email=email, password=hashed_password)
 
     db.session.add(new_user)
     db.session.commit()
-
-    print("hello")
 
     token = jwt.encode({'public_id' : new_user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
     return jsonify({'token' : token.decode('UTF-8')})

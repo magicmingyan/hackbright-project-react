@@ -52,6 +52,7 @@ class Form extends React.Component {
 					</Button>
 					{this.props.className != "Signup" ? (
 						<>
+							<br/>
 							<p>Don't have an account? </p>
 							<form onSubmit={this.handleRegister}>
 								<Button
@@ -66,6 +67,7 @@ class Form extends React.Component {
 						</>
 					) : (
 						<>
+							<br/>
 							<p>Already have an account? </p>
 							<form onSubmit={this.handleRegister}>
 								<Button
