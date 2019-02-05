@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import "./Form.css";
+
 
 class Form extends React.Component {
 	constructor(props) {
@@ -43,7 +45,6 @@ class Form extends React.Component {
 					</FormGroup>
 
 					<Button
-						block
 						bsSize="large"
 						disabled={!this.props.validateForm}
 						type="submit"
@@ -53,10 +54,11 @@ class Form extends React.Component {
 					{this.props.className != "Signup" ? (
 						<>
 							<br/>
-							<p>Don't have an account? </p>
+							<br/>
+							<h4>Don't have an account? </h4>
 							<form onSubmit={this.handleRegister}>
 								<Button
-									block
+									
 									bsSize="large"
 									type="submit"
 									href="/signup"
@@ -68,10 +70,11 @@ class Form extends React.Component {
 					) : (
 						<>
 							<br/>
-							<p>Already have an account? </p>
+							<br/>
+							<h4>Already have an account? </h4>
 							<form onSubmit={this.handleRegister}>
 								<Button
-									block
+									
 									bsSize="large"
 									type="submit"
 									href="/login"

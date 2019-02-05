@@ -14,8 +14,9 @@ import jwt
 from functools import wraps
 
 
-template_dir = os.path.abspath('../frontend/public')
-app = Flask(__name__, template_folder=template_dir)
+template_dir = os.path.abspath('../frontend/build')
+static_dir   = os.path.abspath('../frontend/build/static')
+app = Flask(__name__, static_folder=static_dir,template_folder=template_dir)
 # CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
 # cors = CORS(app, resources={r"/*": { r"supports_credentials":True, r"origins": r"http://localhost:3000" }})
@@ -49,7 +50,7 @@ def token_required(f):
 @app.route('/')
 def index():
     """Show homepage."""
-
+    print(template_dir)
     return render_template("index.html")
 
 @app.route('/geo.json')
@@ -83,6 +84,10 @@ def read_info(current_user):
 
     return jsonify(read_info_list)
 
+@app.route('/login')
+def show_login():
+    """Show login."""
+    return render_template("index.html")
 
 @app.route('/login', methods = ['POST'])
 @cross_origin()
@@ -101,6 +106,16 @@ def login():
         return jsonify({'token' : token.decode('UTF-8')})
 
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+@app.route('/signup')
+def show_signup():
+    """Show singup."""
+    return render_template("index.html")
+
+@app.route('/globe')
+def show_globe():
+    """Show globe."""
+    return render_template("index.html")
 
 @app.route('/signup', methods = ['POST'])
 @cross_origin()
@@ -152,4 +167,4 @@ if __name__ == "__main__":
     connect_to_db(app)
     DebugToolbarExtension(app)
 
-    app.run(host="0.0.0.0")
+    app.run()
