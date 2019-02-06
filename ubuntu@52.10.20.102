@@ -1,0 +1,516 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.6 (Ubuntu 10.6-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.6 (Ubuntu 10.6-0ubuntu0.18.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+ALTER TABLE ONLY public.reading_progress DROP CONSTRAINT reading_progress_user_id_fkey;
+ALTER TABLE ONLY public.reading_event DROP CONSTRAINT reading_event_user_id_fkey;
+ALTER TABLE ONLY public.reading_event DROP CONSTRAINT reading_event_article_id_fkey;
+ALTER TABLE ONLY public.articles DROP CONSTRAINT articles_geo_facet_fkey;
+ALTER TABLE ONLY public.users DROP CONSTRAINT users_public_id_key;
+ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
+ALTER TABLE ONLY public.reading_progress DROP CONSTRAINT reading_progress_pkey;
+ALTER TABLE ONLY public.reading_event DROP CONSTRAINT reading_event_pkey;
+ALTER TABLE ONLY public.geos DROP CONSTRAINT geos_pkey;
+ALTER TABLE ONLY public.articles DROP CONSTRAINT articles_pkey;
+ALTER TABLE public.users ALTER COLUMN user_id DROP DEFAULT;
+ALTER TABLE public.articles ALTER COLUMN article_id DROP DEFAULT;
+DROP SEQUENCE public.users_user_id_seq;
+DROP TABLE public.users;
+DROP TABLE public.reading_progress;
+DROP TABLE public.reading_event;
+DROP TABLE public.geos;
+DROP SEQUENCE public.articles_article_id_seq;
+DROP TABLE public.articles;
+DROP EXTENSION plpgsql;
+DROP SCHEMA public;
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA public;
+
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: articles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.articles (
+    article_id bigint NOT NULL,
+    article_title character varying,
+    abstract character varying,
+    news_source character varying(64),
+    geo_facet character varying(64),
+    lat double precision,
+    longt double precision,
+    category character varying(64),
+    num_reads integer,
+    url character varying(200)
+);
+
+
+--
+-- Name: articles_article_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.articles_article_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: articles_article_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.articles_article_id_seq OWNED BY public.articles.article_id;
+
+
+--
+-- Name: geos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.geos (
+    geo_facet character varying(64) NOT NULL,
+    lat double precision,
+    longt double precision,
+    country_name character varying(64),
+    num_reads integer
+);
+
+
+--
+-- Name: reading_event; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.reading_event (
+    "timestamp" bigint NOT NULL,
+    user_id integer NOT NULL,
+    article_id bigint NOT NULL
+);
+
+
+--
+-- Name: reading_progress; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.reading_progress (
+    date date NOT NULL,
+    user_id integer NOT NULL,
+    available_articles integer NOT NULL,
+    read_articles integer NOT NULL
+);
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users (
+    user_id integer NOT NULL,
+    public_id character varying(50),
+    user_name character varying(64),
+    email character varying(64),
+    password character varying(80)
+);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+
+
+--
+-- Name: articles article_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.articles ALTER COLUMN article_id SET DEFAULT nextval('public.articles_article_id_seq'::regclass);
+
+
+--
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
+
+--
+-- Data for Name: articles; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.articles (article_id, article_title, abstract, news_source, geo_facet, lat, longt, category, num_reads, url) FROM stdin;
+100000006288642	Belgium Bans Religious Slaughtering Practices, Drawing Praise and Protest	Animal rights groups praised the new law banning halal and kosher practices, but Muslims and Jews see it as part of a right-wing nationalist agenda.	nytimes	Belgium	50.8333330000000032	4	World	\N	https://www.nytimes.com/2019/01/05/world/europe/belgium-ban-jewish-muslim-animal-slaughter.html
+100000006292636	Saudi Woman Who Tried to Flee Family Says, ‘They Will Kill Me’	Rahaf Mohammed Alqunun slipped away from her family in Kuwait, and made it all the way to Thailand. There, her hopes of making it to Australia were foiled.	nytimes	Saudi Arabia	25	45	World	\N	https://www.nytimes.com/2019/01/06/world/middleeast/saudi-thailand-rahaf-alqunun.html
+100000006295535	U.S. Downgraded E.U.’s Diplomatic Status (but Didn’t Say Anything)	The Trump administration didn’t formally announce the move or tell the bloc, which was left to figure it out on its own.	nytimes	Europe	48.6909599999999969	9.140625	World	\N	https://www.nytimes.com/2019/01/08/world/europe/eu-us-diplomatic-status.html
+100000006301077	U.S. Equipment, but Not Troops, Begins Exiting Syria in Chaotic Withdrawal	Officials said the number of American troops might actually increase in Syria, to help protect the final withdrawal — a process that is still expected to take at least four to six months.	nytimes	Syria	35	38	World	\N	https://www.nytimes.com/2019/01/11/world/middleeast/us-syria-troop-withdrawal.html
+100000006282434	Where 518 Inmates Sleep in Space for 170, and Gangs Hold It Together	Misery and overcrowding are worse than ever in the Philippines’ pretrial jails, with guards so outnumbered that gangs increasingly keep the peace.	nytimes	Philippines	13	122	World	\N	https://www.nytimes.com/2019/01/07/world/asia/philippines-manila-jail-overcrowding.html
+100000005290802	A Quiet Revolution: More Women Seek Divorces in Conservative West Africa	Frustrated by their husbands’ inability to earn a living, and in a society where basic views on relationships have changed, women are asserting more control over their marriages.	nytimes	Niger	16	8	World	\N	https://www.nytimes.com/2019/01/06/world/africa/niger-divorce-women.html
+100000006298420	Along the U.S.-Mexico Border	As the president fights to build a wall between the United States and Mexico, the journalists Azam Ahmed and Meridith Kohut are along driving the approximately 1,900-mile border and sending dispatches.	nytimes	Mexico	23	-102	World	\N	https://www.nytimes.com/interactive/2019/01/10/world/americas/crossing-us-mexico-border.html
+100000006292451	Israeli Teenagers Are Suspected in Deadly Stoning of a Palestinian Woman	Five youths are being investigated for “grave terrorism offenses, including murder,” over the death of Aisha Rabi on a West Bank road.	nytimes	West Bank	31.6666670000000003	35.25	World	\N	https://www.nytimes.com/2019/01/06/world/middleeast/israel-teenagers-stoning-palestinian.html
+100000006291865	Japan’s ‘King of Tuna’ Pays Record $3 Million for Bluefin at New Tokyo Fish Market	The first tuna auction of the year at Tokyo’s new fish market set a record price — more than $3 million — for a giant bluefin tuna, a critically endangered species.	nytimes	Japan	35.6853570000000033	139.753088999999989	World	\N	https://www.nytimes.com/2019/01/05/world/asia/record-tuna-price-japan.html
+1	Reclaiming the Bay	More than a square mile of former salt ponds north of Mountain View is set to begin its transformation back into wetland habitat, returning the city's bayshore to its natural state after more than a century of industrial salt production.	mountainviewvoice	Mountain View	37.3860519999999994	-122.083850999999996	\N	\N	https://www.mv-voice.com/news/2019/01/11/reclaiming-the-bay
+2	Shareholder sues Alphabet over harassment scandal	A shareholder sued the board of Google Inc.'s parent company, Alphabet Inc., in San Mateo County Superior Court Thursday for allegedly tolerating and covering up sexual harassment by senior executives. \n	mountainviewvoice	Mountain View	37.3860519999999994	-122.083850999999996	\N	\N	https://www.mv-voice.com/news/2019/01/11/shareholder-sues-google-parent-company-over-sexual-harassment
+3	NASA Ames braces for long shutdown	The full brunt of the government shutdown is hitting home as federal employees face their first payday with no check. NASA Ames union officials say a prolonged shutdown could push talented researchers into the private sector. 	mountainviewvoice	Mountain View	37.3860519999999994	-122.083850999999996	\N	\N	https://www.mv-voice.com/news/2019/01/10/nasa-employees-brace-for-prolonged-shutdown
+4	103 years old and still going strong	"It's wonderful to be alive, but I do keep asking the Lord why he keeps me around," says 103-year-old Mary Peterson, a longtime Mountain View resident who celebrates her birthday this week. 	mountainviewvoice	Mountain View	37.3860519999999994	-122.083850999999996	\N	\N	https://www.mv-voice.com/news/2019/01/10/103-years-old-and-still-going-strong
+100000006312773	Belarusian Escort Who Claimed Evidence of Russian Meddling Is Detained in Moscow	Anastasia Vashukevich, who said she had recordings that shed light on meddling in the 2016 American election, had been deported from Thailand.	nytimes	Russia	60	100	World	\N	https://www.nytimes.com/2019/01/17/world/europe/anastasia-vashukevich-nastya-rybka-detained.html
+100000006337185	9 Tons of Pangolin Scales Are Seized in Hong Kong	Officials believe the scales came from nearly 14,000 pangolins. All eight pangolin species are endangered, some critically.	nytimes	Hong Kong	22.2840139999999991	114.150074000000004	World	\N	https://www.nytimes.com/2019/02/01/world/asia/pangolin-smuggling-hong-kong.html
+100000006336696	Book Written by Detainee via WhatsApp Gets a Top Prize	Behrouz Boochani, an asylum seeker detained by the Australian government, could not attend the festivities to accept the award.	nytimes	Australia	-25	135	World	\N	https://www.nytimes.com/2019/01/31/world/australia/behrouz-boochani-victorian-prize-manus-island.html
+100000006332348	More Bark Than Bite in Iran’s Ban on Walking Dogs	Tehranians, accustomed to periodic crackdowns by their Islamic guardians, are not taking the decree all that seriously. Nor, it seems, are the police.	nytimes	Iran	32	53	World	\N	https://www.nytimes.com/2019/02/01/world/middleeast/iran-ban-walking-dogs.html
+100000006335162	India’s Leader Is Accused of Hiding Unemployment Data Before Vote	The leaked report undercut a tenet of Prime Minister Narendra Modi’s job-creation vows, and came out just months before the next election.	nytimes	India	20	77	World	\N	https://www.nytimes.com/2019/01/31/world/asia/india-unemployment-rate.html
+\.
+
+
+--
+-- Data for Name: geos; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.geos (geo_facet, lat, longt, country_name, num_reads) FROM stdin;
+Belgium	50.8333330000000032	4	Belgium	\N
+Saudi Arabia	25	45	Saudi Arabia	\N
+Europe	48.6909599999999969	9.140625	None	\N
+Syria	35	38	Syria	\N
+Philippines	13	122	Philippines	\N
+Niger	16	8	Niger	\N
+Mexico	23	-102	Mexico	\N
+West Bank	31.6666670000000003	35.25	Palestinian Territory	\N
+Japan	35.6853570000000033	139.753088999999989	Japan	\N
+Mountain View	37.3860519999999994	-122.083850999999996	United States	\N
+Russia	60	100	Russia	\N
+Hong Kong	22.2840139999999991	114.150074000000004	Hong Kong	\N
+Australia	-25	135	Australia	\N
+Iran	32	53	Iran	\N
+India	20	77	India	\N
+\.
+
+
+--
+-- Data for Name: reading_event; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.reading_event ("timestamp", user_id, article_id) FROM stdin;
+1547604952	1	100000006298420
+1547604956	1	100000006298420
+1547609067	1	100000006298420
+1547609069	1	4
+1547609071	1	100000006288642
+1547609072	1	100000006295535
+1547609157	1	100000006288642
+1547609159	1	100000006295535
+1547609160	1	100000006295535
+1547609684	1	100000006298420
+1547609694	1	100000006298420
+1547609704	1	4
+1547609808	1	100000006298420
+1547609813	1	100000006298420
+1547609814	1	100000006298420
+1547609838	1	100000006298420
+1547609842	1	100000006298420
+1547609848	1	4
+1547609896	1	100000006298420
+1547611214	1	100000006298420
+1547611220	1	100000006298420
+1547611224	1	4
+1547611228	1	4
+1547611229	1	4
+1547611297	1	100000005290802
+1547611404	1	100000006291865
+1547611412	1	100000006291865
+1547611413	1	100000006291865
+1547611415	1	100000006282434
+1547611657	1	100000006298420
+1547611661	1	100000006298420
+1547611686	1	100000006298420
+1547614575	1	4
+1547614578	1	100000006298420
+1547614582	1	100000006298420
+1547614583	1	100000006298420
+1547614587	1	4
+1547614595	1	100000006288642
+1547614598	1	100000006288642
+1547614599	1	100000006295535
+1547614602	1	100000006295535
+1547779142	1	4
+1547779146	1	4
+1547779148	1	100000006298420
+1547779151	1	100000006288642
+1547779155	1	100000006288642
+1547783172	1	4
+1547783175	1	100000006298420
+1547783270	1	100000006298420
+1547783617	1	100000006298420
+1547783622	1	4
+1547783700	1	100000006298420
+1547784661	1	100000006298420
+1547784665	1	100000006298420
+1547784668	1	4
+1547784979	1	100000006298420
+1547787774	2	4
+1547787776	2	100000006298420
+1547839956	1	100000006295535
+1547839962	1	100000006295535
+1547839963	1	100000006288642
+1547839964	1	100000006288642
+1547839965	1	100000005290802
+1547839967	1	100000005290802
+1547840027	1	100000006291865
+1547923061	8	4
+1547923063	8	100000006298420
+1547923066	8	100000005290802
+1547923068	8	100000006288642
+1547923107	8	4
+1547923108	8	100000006298420
+1547923109	8	100000006288642
+1547923110	8	100000005290802
+1547923111	8	100000005290802
+1547939595	1	100000006295535
+1547939619	1	100000006288642
+1547943319	1	100000006288642
+1547943884	1	100000005290802
+1548206917	1	100000006301077
+1548206920	1	100000006301077
+1548206928	1	100000006295535
+1548206941	1	100000006301077
+1548206947	1	4
+1548206949	1	4
+1548206993	1	4
+1548206995	1	100000006298420
+1548207002	1	100000006298420
+1548207004	1	4
+1548207009	1	100000006295535
+1548213950	1	100000006298420
+1548214305	1	4
+1548214308	1	100000006292451
+1548214576	1	100000006298420
+1548215604	1	4
+1548215759	1	100000006298420
+1548215808	1	100000006298420
+1548215881	1	100000006298420
+1548391303	1	100000006298420
+1548391308	1	4
+1548391335	1	4
+1548391604	1	100000005290802
+1548465288	1	100000006295535
+1548465303	1	100000005290802
+1548529167	1	100000006282434
+1548529522	1	100000006298420
+1548530596	1	100000006288642
+1548810752	1	100000005290802
+1548817086	12	100000006298420
+1548817088	12	100000006298420
+1548817088	12	4
+1548817096	12	100000006298420
+1548817118	12	100000006298420
+1548817119	12	100000006298420
+1548817142	12	100000006298420
+1548817144	12	4
+1548817155	12	100000006298420
+1548817156	12	100000006298420
+1548817345	12	100000006288642
+1548817391	12	100000005290802
+1548817399	12	100000006295535
+1548817403	12	100000006295535
+1548817405	12	100000005290802
+1548817408	12	100000006292636
+1548817419	12	4
+1548817774	1	100000006301077
+1548817778	1	100000006301077
+1548817781	1	100000006292451
+1548817786	1	100000006292451
+1548817787	1	100000006295535
+1548817788	1	100000006295535
+1548817790	1	100000006288642
+1548817793	1	100000005290802
+1548817913	1	100000006288642
+1548817914	1	100000006288642
+1548817920	1	100000005290802
+1548817926	1	100000005290802
+\.
+
+
+--
+-- Data for Name: reading_progress; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.reading_progress (date, user_id, available_articles, read_articles) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.users (user_id, public_id, user_name, email, password) FROM stdin;
+1	4ca4946b-654c-44cd-b2ee-b2b04fd06482	test	test@gmail.com	sha256$z023BIAQ$68bf64697c630890189ccf357a9aa46114426b08f722341b0f20b9bb87f56a3a
+2	4f1f8678-eed3-4c91-997a-1fe7c3122b8b	ming	ming@gmail.com	sha256$Z3cQbg7x$21f0fd62df01afbde0d7e28487b67f29dd441d54ea3eba62f1d8ca4cc5ad7fe3
+3	3bcb6961-1d32-415a-abb3-4eafc2d4fba4	test3	test3@gmail.com	sha256$FT965jZd$89dab0b1ebb70b395ce261e009e670746c172a36c25643d306a6af4a98b0572b
+4	e0df0316-fb05-45fe-a9b2-5ab6a38c6dcc	test3	test3@gmail.com	sha256$EAJ8BiEf$9e9d397cb3922202dfc9dcf748d2b04f3b759cd10a4cfa493c55dee39bdd27e5
+5	09f8da1f-e3aa-495d-949f-d900a3d66603	test3	test3@gmail.com	sha256$wzm9gRtl$05864a99b5a8a18fee196898343257b5a621bcbe4d65782d80e25ffe01b7ab28
+6	a2d20375-bd38-4015-a941-41ca0fcf7ac2	test3	test3@gmail.com	sha256$Z9WGq0bK$18788796b548e903a368d61744afc3ecd4b675f7dc8ac4474c2aa81927985d69
+7	fc32b12d-0727-4fea-b855-546e0e864ca2	test3	test3@gmail.com	sha256$pT3TLXFR$0927088d7b789a6426796a8f936b45a539640141b1773883ae79ee7502e45af0
+8	80c8f65b-d0a3-4401-aa75-92f9e029f153	test3	test@gmail.com3	sha256$03sg97tY$7f8d8d697574bc6d0ad908e9287f2176935f77e1d5b98c87de2dde50277a0f52
+9	e4bfd481-cb33-4a90-a3cb-745c2a7773a5	test@hotmail.com	test@hotmail.com	sha256$875ZMEd0$afc259cefc9b7734643accf4c06a2c7531ed5feff16b4d9f042639697e3f3f14
+10	b258d609-0aeb-4940-8a5c-8cf18c1ba48c	hotmail	t@5	sha256$Kx7T3ixD$9fa89b6d1e20e04b85392a0ba87c2c6f733f2fa54e38785a6a28e540e75a9ce0
+11	bf9b3bfe-8f65-4e99-844c-d5fa5944e583	test6	test6@gmail.com	sha256$nrecFTkW$4fd166435c22b3dfe2fe3f2bd5b5b1783ff2f3192048421c3e9c2784c110fe27
+12	32a116ef-1575-42c4-8cf2-61486df5138e	test7	test7@gmail.com	sha256$gDBCX3gZ$b40175c5035adba0aaa2f30388ada3d81569e613ddf4a956276b833aa287180b
+\.
+
+
+--
+-- Name: articles_article_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.articles_article_id_seq', 4, true);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 12, true);
+
+
+--
+-- Name: articles articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.articles
+    ADD CONSTRAINT articles_pkey PRIMARY KEY (article_id);
+
+
+--
+-- Name: geos geos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.geos
+    ADD CONSTRAINT geos_pkey PRIMARY KEY (geo_facet);
+
+
+--
+-- Name: reading_event reading_event_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reading_event
+    ADD CONSTRAINT reading_event_pkey PRIMARY KEY ("timestamp", user_id, article_id);
+
+
+--
+-- Name: reading_progress reading_progress_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reading_progress
+    ADD CONSTRAINT reading_progress_pkey PRIMARY KEY (date, user_id, available_articles, read_articles);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: users users_public_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_public_id_key UNIQUE (public_id);
+
+
+--
+-- Name: articles articles_geo_facet_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.articles
+    ADD CONSTRAINT articles_geo_facet_fkey FOREIGN KEY (geo_facet) REFERENCES public.geos(geo_facet);
+
+
+--
+-- Name: reading_event reading_event_article_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reading_event
+    ADD CONSTRAINT reading_event_article_id_fkey FOREIGN KEY (article_id) REFERENCES public.articles(article_id);
+
+
+--
+-- Name: reading_event reading_event_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reading_event
+    ADD CONSTRAINT reading_event_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: reading_progress reading_progress_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reading_progress
+    ADD CONSTRAINT reading_progress_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: -
+--
+
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

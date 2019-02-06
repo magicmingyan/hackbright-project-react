@@ -161,10 +161,10 @@ def after(response):
 
 
 if __name__ == "__main__":
-    app.debug = True
+    # app.debug = True
     # CORS(app, resources={r"/*": {"origins": "*"}})
     # cors = CORS(app, resources={r"/*": { r"supports_credentials":True, r"origins": r"http://localhost:3000" }})
     connect_to_db(app)
     DebugToolbarExtension(app)
 
-    app.run()
+    app.run(host="0.0.0.0")

@@ -35,7 +35,7 @@ class Globe extends Component {
         }));
       }
 
-      fetch("http://localhost:5000/read_articles", {
+      fetch("http://52.10.20.102/read_articles", {
         headers: { "x-access-token": window.localStorage.getItem("token") },
         credentials: "include",
         method: "POST",
@@ -55,7 +55,7 @@ class Globe extends Component {
     ).addTo(earth);
 
     const first_request = async () => {
-      const response = await fetch("http://localhost:5000/read_event.json", {
+      const response = await fetch("http://52.10.20.102/read_event.json", {
         headers: { "x-access-token": window.localStorage.getItem("token") },
         method: "GET",
         credentials: "include"
@@ -76,7 +76,7 @@ class Globe extends Component {
 
     const second_request = async () => {
       await first_request();
-      const response = await fetch("http://localhost:5000/geo.json", {
+      const response = await fetch("http://52.10.20.102/geo.json", {
         method: "GET",
         credentials: "include"
       });

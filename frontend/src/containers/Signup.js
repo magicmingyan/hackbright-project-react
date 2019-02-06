@@ -27,7 +27,7 @@ class Signup extends Component {
 		event.preventDefault();
 		axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 		axios
-			.post("http://localhost:5000/signup", {
+			.post("http://52.10.20.102/signup", {
 				user_name: this.state.user_name,
 				email: this.state.email,
 				password: this.state.password

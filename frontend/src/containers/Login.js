@@ -26,7 +26,7 @@ class Login extends Component {
 		event.preventDefault();
 		// $.post('http://localhost:5000/result', {email: this.state.email}, ()=>console.log("success!"))
 		axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-		axios.post('http://localhost:5000/login', {email: this.state.email, password: this.state.password})
+		axios.post('http://52.10.20.102/login', {email: this.state.email, password: this.state.password})
 		.then(response => {
  			if(response.data.hasOwnProperty('token')){
 				 window.localStorage.setItem('token', response.data.token);
